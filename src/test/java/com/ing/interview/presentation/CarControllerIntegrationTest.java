@@ -7,43 +7,44 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ing.interview.InterviewApplication;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.ing.interview.InterviewApplication;
+
 @AutoConfigureMockMvc
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = InterviewApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = InterviewApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CarControllerIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @Test
-    void givenCarWhenCreateThenReturnIsOk() throws Exception {
-        // given: Request Car
-        JSONObject car = new JSONObject();
-        car.put("age", 16);
-        car.put("model", "FIAT");
+	@Test
+	void givenCarWhenCreateThenReturnIsOk() throws Exception {
+		String color = "BLUE";
+		String model = "PEUGEOT";
 
-        this.mockMvc
-            .perform(
-                post("/car")
-                    .contentType(APPLICATION_JSON)
-                    .content(car.toString()))
-            .andDo(print())
-            // Response Status
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(APPLICATION_JSON))
-            // Response Body
-            .andExpect(jsonPath("$.model").value("FIAT"))
-            .andExpect(jsonPath("$.orderDate").exists());
-    }
+		// given: Request Car
+		JSONObject car = new JSONObject();
+		car.put("age", 16);
+		car.put("color", color);
+		car.put("model", model);
+
+		this.mockMvc.perform(post("/car").contentType(APPLICATION_JSON)
+		        .content(car.toString()))
+		        .andDo(print())
+		        // Response Status
+		        .andExpect(status().isCreated())
+		        .andExpect(content().contentType(APPLICATION_JSON))
+		        // Response Body
+		        .andExpect(jsonPath("$.model").value(model))
+		        .andExpect(jsonPath("$.color").value(color))
+		        .andExpect(jsonPath("$.orderDate").exists());
+	}
 
 }

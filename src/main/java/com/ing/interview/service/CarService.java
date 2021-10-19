@@ -1,28 +1,41 @@
 package com.ing.interview.service;
 
-import com.ing.interview.infrastructure.CarRepository;
 import java.time.LocalDate;
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
+import com.ing.interview.dto.CarDto;
+import com.ing.interview.entity.Car;
+import com.ing.interview.infrastructure.CarRepository;
+import com.ing.interview.integration.CarAvailabilityRestConnector;
+
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class CarService {
 
-    private final CarRepository carRepository;
+	private final CarRepository carRepository;
+	private final CarAvailabilityRestConnector carAvailabilityRestConnector;
 
-    public CarService(CarRepository carRepository) {
-        this.carRepository = carRepository;
-    }
+	public Optional<Car> create(CarDto carCommand) {
 
-    public Car create(CarCommand carCommand) {
-        final Car car = Car.builder()
-            .color(carCommand.getColor())
-            .model(carCommand.getModel())
-            .orderDate(LocalDate.now())
-            .build();
+		String color = carCommand.getColor();
+		String model = carCommand.getModel();
 
-        carRepository.save(car);
+		if (!carAvailabilityRestConnector.available(model, color)) {
+			return Optional.empty();
+		}
 
-        return car;
-    }
+		final Car car = Car.builder()
+		        .color(color)
+		        .model(model)
+		        .orderDate(LocalDate.now())
+		        .build();
 
+		carRepository.save(car);
+
+		return Optional.of(car);
+	}
 }

@@ -1,4 +1,4 @@
-package com.ing.interview.infrastructure;
+package com.ing.interview.integration;
 
 import java.util.HashMap;
 import java.util.Map;
