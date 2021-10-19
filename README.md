@@ -3,7 +3,7 @@
 Modifica la funcionalidad existente del servicio de creación de pedido de coche:
 
 ## Modificar el código de respuesta
-- [ ] Devolver un 201 en la creación de la solicitud del coche (en caso de éxito)
+- [x] Devolver un 201 en la creación de la solicitud del coche (en caso de éxito)
 
 ## Integrar con el servicio de stock
 Dado el comportamiento actual de la creación de solicitud de vehículo (Create Car)
