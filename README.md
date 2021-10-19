@@ -1,5 +1,8 @@
 # Prueba técnica: Solicitud Vehículo
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/4618d01af1e247eaa5e75b73b1dbdd51)](https://www.codacy.com/gh/MaQuiNa1995/EntrevistaTecnica_Vehiculos/dashboard?utm_source=github.com&utm_medium=referral&utm_content=MaQuiNa1995/EntrevistaTecnica_Vehiculos&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/4618d01af1e247eaa5e75b73b1dbdd51)](https://www.codacy.com/gh/MaQuiNa1995/EntrevistaTecnica_Vehiculos/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MaQuiNa1995/EntrevistaTecnica_Vehiculos&amp;utm_campaign=Badge_Grade)
+
 Modifica la funcionalidad existente del servicio de creación de pedido de coche:
 
 ## Modificar el código de respuesta
