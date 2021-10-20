@@ -1,41 +1,16 @@
 package com.ing.interview.service;
 
-import java.time.LocalDate;
 import java.util.Optional;
-
-import org.springframework.stereotype.Component;
 
 import com.ing.interview.dto.CarDto;
 import com.ing.interview.entity.Car;
-import com.ing.interview.infrastructure.CarRepository;
-import com.ing.interview.integration.CarAvailabilityRestConnector;
+import com.ing.interview.exception.ModelNotAvailableForColorPick;
+import com.ing.interview.exception.OutOfStockException;
 
-import lombok.RequiredArgsConstructor;
+public interface CarService {
 
-@Component
-@RequiredArgsConstructor
-public class CarService {
+	Car create(CarDto dto) throws OutOfStockException, ModelNotAvailableForColorPick;
 
-	private final CarRepository carRepository;
-	private final CarAvailabilityRestConnector carAvailabilityRestConnector;
+	Optional<Car> findById(Long id);
 
-	public Optional<Car> create(CarDto carCommand) {
-
-		String color = carCommand.getColor();
-		String model = carCommand.getModel();
-
-		if (!carAvailabilityRestConnector.available(model, color)) {
-			return Optional.empty();
-		}
-
-		final Car car = Car.builder()
-		        .color(color)
-		        .model(model)
-		        .orderDate(LocalDate.now())
-		        .build();
-
-		carRepository.save(car);
-
-		return Optional.of(car);
-	}
 }

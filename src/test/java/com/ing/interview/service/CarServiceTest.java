@@ -1,6 +1,6 @@
 package com.ing.interview.service;
 
-import java.util.Optional;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.ing.interview.InterviewApplication;
 import com.ing.interview.dto.CarDto;
 import com.ing.interview.entity.Car;
+import com.ing.interview.exception.ModelNotAvailableForColorPick;
+import com.ing.interview.exception.OutOfStockException;
 import com.ing.interview.infrastructure.CarRepository;
 import com.ing.interview.integration.CarAvailabilityRestConnector;
 
@@ -28,7 +30,7 @@ class CarServiceTest {
 	private CarService sut;
 
 	@Test
-	void givenCommandWhenCreateThenExpectedValues() {
+	void givenCommandWhenCreateThenExpectedValues() throws OutOfStockException, ModelNotAvailableForColorPick {
 
 		// mocks
 		String color = "PINK";
@@ -36,23 +38,34 @@ class CarServiceTest {
 		Mockito.when(carAvailabilityRestConnector.available(model, color))
 		        .thenReturn(true);
 
+		final Car car = Car.builder()
+		        .color(color)
+		        .model(model)
+		        .build();
+
+		final Car carDb = Car.builder()
+		        .id(1L)
+		        .color(color)
+		        .model(model)
+		        .orderDate(LocalDate.now())
+		        .build();
+
+		Mockito.when(carRepository.save(car))
+		        .thenReturn(carDb);
+
 		// given
 		CarDto carCommand = CarDto.builder()
-		        .age(16)
+		        .age(18)
 		        .color(color)
 		        .model(model)
 		        .build();
 
 		// when
-		Optional<Car> optionalCar = sut.create(carCommand);
-		Assertions.assertTrue(optionalCar.isPresent());
+		Car result = sut.create(carCommand);
 
 		// then
-		final Car result = optionalCar.get();
 		Assertions.assertAll(() -> Assertions.assertEquals("PINK", result.getColor()),
 		        () -> Assertions.assertEquals("BMW", result.getModel()));
-
-		;
 
 	}
 

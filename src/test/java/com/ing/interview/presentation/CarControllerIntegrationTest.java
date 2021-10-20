@@ -31,7 +31,7 @@ class CarControllerIntegrationTest {
 
 		// given: Request Car
 		JSONObject car = new JSONObject();
-		car.put("age", 16);
+		car.put("age", 18);
 		car.put("color", color);
 		car.put("model", model);
 
